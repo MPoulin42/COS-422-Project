@@ -28,7 +28,7 @@ HIDDEN_SIZE = 256  # Size of the LSTM hidden state
 NUM_LAYERS = 2  # Number of LSTM layers
 DROPOUT = 0.4  # Dropout rate for regularization
 LR = 0.001  # Learning rate for the optimizer
-EPOCHS = 50
+EPOCHS = 1
 NUM_CLASSES = 47
 
 # --- Early Stopping ---
@@ -44,9 +44,12 @@ LOG_FILE = "results.csv"
 
 
 def log_results(label, train_acc, test_acc, epochs_run):
-    file_exists = os.path.exists(LOG_FILE)
+    RESULTS_DIR = "models/RCNN/results"
+    os.makedirs(RESULTS_DIR, exist_ok=True)
 
-    with open(LOG_FILE, "a", newline="") as f:
+    file_path = os.path.join(RESULTS_DIR, LOG_FILE)
+    file_exists = os.path.exists(file_path)
+    with open(file_path, "a", newline="") as f:
         writer = csv.writer(f)
 
         if not file_exists:

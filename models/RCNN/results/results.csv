@@ -1,0 +1,2 @@
+timestamp,label,num_patches,filters,hidden_size,num_layers,dropout,batch_size,lr,epochs_run,patience,train_acc,test_acc,device
+2026-04-12 22:18,unlabeled,7,64,256,2,0.4,512,0.001,1,5,64.59,81.22,cuda
