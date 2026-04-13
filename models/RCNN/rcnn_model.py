@@ -19,7 +19,7 @@ import csv
 import os
 from datetime import datetime
 
-# Changeable but not reccomedned
+# Changeable but not recommended
 CONST_NUM_PATCHES = 7  # Number of vertical patches to split the image into
 
 # --- Hyperparameters ---
