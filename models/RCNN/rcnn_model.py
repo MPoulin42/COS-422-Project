@@ -28,7 +28,7 @@ HIDDEN_SIZE = 256  # Size of the LSTM hidden state
 NUM_LAYERS = 2  # Number of LSTM layers
 DROPOUT = 0.4  # Dropout rate for regularization
 LR = 0.001  # Learning rate for the optimizer
-EPOCHS = 1
+EPOCHS = 50
 NUM_CLASSES = 47
 
 # --- Early Stopping ---
