@@ -1,3 +1,15 @@
+# Phl Lanes - RCNN Model for EMNIST Balanced Character Recognition
+# -------------------------------------------------------
+# Features:
+#   - Patch-based image splitting (image divided into horizontal strips)
+#   - CNN feature extraction per patch (multi-layer with batch normalization)
+#   - LSTM sequential modeling across patches
+#   - Mixed precision training (float16 via torch.amp)
+#   - Cosine annealing learning rate scheduling
+#   - Early stopping with best model checkpointing
+#   - CSV logging of hyperparameters and results per run
+#   - GPU accelerated (CUDA) with optimized DataLoader pipeline
+# --------------------------------------------------------
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -7,6 +19,7 @@ import csv
 import os
 from datetime import datetime
 
+# Changeable but not reccomedned
 CONST_NUM_PATCHES = 7  # Number of vertical patches to split the image into
 
 # --- Hyperparameters ---
@@ -86,11 +99,13 @@ transform = transforms.Compose(
     [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
 )
 
+root = os.path.join(os.path.dirname(__file__), "..", "..", "data")
+
 train_dataset = datasets.EMNIST(
-    root="./data", split="balanced", train=True, download=False, transform=transform
+    root=root, split="balanced", train=True, download=False, transform=transform
 )
 test_dataset = datasets.EMNIST(
-    root="./data", split="balanced", train=False, download=False, transform=transform
+    root=root, split="balanced", train=False, download=False, transform=transform
 )
 
 train_loader = DataLoader(
