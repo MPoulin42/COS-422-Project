@@ -19,8 +19,12 @@ class CNN(nn.Module):
     def __init__(self, f1, f2, hidden_fc, num_classes= 47):
         super(CNN, self).__init__()
 
+        self.dropout = nn.Dropout(0.25) #drop 25% of neurons to reduce overfitting
+
         self.conv1 = nn.Conv2d(1, f1, kernel_size= 3) #layer 1
+        self.bn1 = nn.BatchNorm2d(f1) #batch normalization
         self.pool = nn.MaxPool2d(2,2)
+        self.bn2 = nn.BatchNorm2d(f2)
 
         self.conv2 = nn.Conv2d(f1, f2, kernel_size= 3) #layer 2
 
@@ -32,16 +36,20 @@ class CNN(nn.Module):
 #forward pass
     def forward(self, x):
         x = self.conv1(x)
+        x = self.bn1(x)
         x = F.relu(x)
         x = self.pool(x)
 
         x = self.conv2(x)
+        x = self.bn2(x)
         x = F.relu(x)
         x = self.pool(x)
 
         #flatten
         x = x.view(-1, self.flattened_size) 
+        x = self.dropout(x)
         x = F.relu(self.fc1(x))
+        x = self.dropout(x)
         return self.fc2(x)
 
 def train_func(model, train_loader, criterion, optimizer, device):
@@ -106,21 +114,22 @@ def main():
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu") #set device
     print(f" Program is using {device.type.upper()}")
-    #Hyperparameters
+    
+    #-------Hyperparameters------------------------------
     f1 = 32            #num of Layer 1 filters
     f2 = 64            #num of Layer 2 filters
     hidden_dim = 128   #Hidden layer neurons
     learn_rate = 1e-3  #learn rate
-    epochs = 45        #num of training loops
+    epochs = 50        #num of training loops
     batch_size = 64     #images per batch
-
+    
 
     #dataset wrapping tensors
     train_dataset = EMNISTDataset('emnist-balanced-train.csv', split='train')
     val_dataset = EMNISTDataset('emnist-balanced-train.csv', split='validate')
 
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    val_loader = DataLoader(val_dataset,batch_size=batch_size, shuffle=False)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True, persistent_workers=True, prefetch_factor=2)
+    val_loader = DataLoader(val_dataset,batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=True, persistent_workers=True, prefetch_factor=2)
 
   
   
@@ -131,9 +140,8 @@ def main():
     print(f" Model on GPU? {next(model.parameters()).is_cuda}")
 
 
-    optimizer = optim.Adam(model.parameters(), learn_rate)
-
-
+    optimizer = optim.Adam(model.parameters(), learn_rate, weight_decay=1e-5)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=0.5, patience=3)
 
     train_accuracy = []
     val_accuracy = []
@@ -141,6 +149,8 @@ def main():
     for epoch in range(epochs):
         train_loss, train_acc = train_func(model, train_loader, criterion, optimizer, device)
         val_loss, val_acc = evaluate(model, val_loader, criterion, device)
+
+        scheduler.step(val_acc)
 
         train_accuracy.append(train_acc)
         val_accuracy.append(val_acc)
@@ -162,6 +172,15 @@ def main():
     plt.grid(True)
     plt.show()
 
+    print("Starting Evaluation on Test Set")
 
+    test_dataset = EMNISTDataset('emnist-balanced-test.csv', split='test')
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=True)
+
+    test_loss, test_acc = evaluate(model, test_loader, criterion, device)
+
+    print(f"Test Accuracy: {test_acc * 100:.2f}%")
+
+    
 if __name__ == "__main__":
     main()
