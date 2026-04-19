@@ -11,6 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
 from EMNISTDataset import EMNISTDataset
 from torch.utils.data import DataLoader
 
@@ -181,6 +182,30 @@ def main():
 
     print(f"Test Accuracy: {test_acc * 100:.2f}%")
 
+    #final print results
+    results = {
+        "Model": "CNN (w/ Batch Normalization and Dropout)",
+        "Training Accuracy": f"{train_accuracy[-1]*100:.2f}%",
+        "Validation Accuracy": f"{val_accuracy[-1]*100:.2f}%",
+        "Test Accuracy": f"{test_acc*100:.2f}%",
+        "Epochs": epochs,
+    }
+
+    print(pd.DataFrame([results]))
     
+    model.eval()
+    y_true = []
+    y_pred = []
+
+    with torch.no_grad():
+        for images, labels in test_loader:
+            images = images.to(device)
+            outputs = model(images)
+            _, predicted = torch.max(outputs, 1)
+            y_true.extend(labels.numpy())
+            y_pred.extend(predicted.cpu().numpy())
+
+    print(classification_report(y_true, y_pred))
+
 if __name__ == "__main__":
     main()
