@@ -1,0 +1,68 @@
+cnn_model.py
+ Program is using CUDA
+ Model on GPU? True
+Epoch 001 |Train Loss=0.8247 | Train Accuracy=0.7408 | Validation Loss=0.4413 | Validation Accuracy =  0.8499
+Epoch 010 |Train Loss=0.3567 | Train Accuracy=0.8701 | Validation Loss=0.3313 | Validation Accuracy =  0.8827
+Epoch 020 |Train Loss=0.2899 | Train Accuracy=0.8907 | Validation Loss=0.3236 | Validation Accuracy =  0.8863
+Epoch 030 |Train Loss=0.2207 | Train Accuracy=0.9134 | Validation Loss=0.3169 | Validation Accuracy =  0.8905
+Epoch 040 |Train Loss=0.2004 | Train Accuracy=0.9198 | Validation Loss=0.3215 | Validation Accuracy =  0.8918
+Epoch 050 |Train Loss=0.1891 | Train Accuracy=0.9239 | Validation Loss=0.3236 | Validation Accuracy =  0.8926
+Starting Evaluation on Test Set
+Test Accuracy: 89.19%
+                                      Model  ... Epochs
+0  CNN (w/ Batch Normalization and Dropout)  ...     50
+
+[1 rows x 5 columns]
+              precision    recall  f1-score   support
+
+           0       0.66      0.73      0.69       400
+           1       0.56      0.72      0.63       400
+           2       0.93      0.88      0.90       400
+           3       0.99      0.98      0.99       400
+           4       0.95      0.93      0.94       400
+           5       0.96      0.91      0.93       400
+           6       0.94      0.95      0.94       400
+           7       0.97      0.99      0.98       400
+           8       0.96      0.96      0.96       400
+           9       0.71      0.83      0.76       400
+          10       0.96      0.97      0.97       400
+          11       0.97      0.97      0.97       400
+          12       0.96      0.96      0.96       400
+          13       0.94      0.93      0.93       400
+          14       0.99      0.98      0.99       400
+          15       0.69      0.60      0.64       400
+          16       0.94      0.96      0.95       400
+          17       0.95      0.98      0.97       400
+          18       0.71      0.66      0.68       400
+          19       0.96      0.95      0.96       400
+          20       0.99      0.97      0.98       400
+          21       0.65      0.51      0.57       400
+          22       0.97      0.97      0.97       400
+          23       0.94      0.98      0.96       400
+          24       0.70      0.66      0.68       400
+          25       0.97      0.97      0.97       400
+          26       0.95      0.94      0.95       400
+          27       0.95      0.98      0.97       400
+          28       0.91      0.95      0.93       400
+          29       0.94      0.92      0.93       400
+          30       0.93      0.94      0.93       400
+          31       0.93      0.94      0.93       400
+          32       0.99      0.99      0.99       400
+          33       0.99      0.96      0.98       400
+          34       0.93      0.94      0.93       400
+          35       0.91      0.94      0.92       400
+          36       0.88      0.93      0.90       400
+          37       0.95      0.92      0.93       400
+          38       0.96      0.97      0.96       400
+          39       0.97      0.97      0.97       400
+          40       0.63      0.68      0.65       400
+          41       0.80      0.66      0.72       400
+          42       0.95      0.95      0.95       400
+          43       0.95      0.93      0.94       400
+          44       0.67      0.62      0.65       400
+          45       0.95      0.95      0.95       400
+          46       0.90      0.92      0.91       400
+
+    accuracy                           0.89     18800
+   macro avg       0.89      0.89      0.89     18800
+weighted avg       0.89      0.89      0.89     18800
